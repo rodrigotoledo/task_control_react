@@ -6,7 +6,7 @@ const TaskContext = createContext();
 
 export const TaskProvider = ({children}) => {
   const { data, isLoading, error, refetch } = useQuery("tasks", () => {
-      return axios.get('/tasks').then((response) => response.data);
+      return axios.get('/api/tasks').then((response) => response.data);
     },
     {
       retry: 5,
@@ -17,7 +17,7 @@ export const TaskProvider = ({children}) => {
 
   const taskMutation = useMutation({
     mutationFn: ({taskId}) => {
-      return axios.patch(`/tasks/${taskId}`).then((response) => response.data);
+      return axios.patch(`/api/tasks/${taskId}`).then((response) => response.data);
     },
     onSuccess: (data) => {
       refetch()

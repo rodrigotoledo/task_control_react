@@ -19,7 +19,7 @@ const Projects = () => {
         <tbody>
           {!isLoadingProjects && projects.map((project) => (
             <tr key={project.id}>
-              <td className="border border-gray-200 px-4 py-2">{project.name}</td>
+              <td className="border border-gray-200 px-4 py-2">{project.title}</td>
               <td className="border border-gray-200 px-4 py-2">
                 {project.completed_at ? (
                   <span className="text-green-500">Completed</span>
