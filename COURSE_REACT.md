@@ -79,7 +79,7 @@ E agora novamente no arquivo `index.js` remova a linha de `index.css` e substitu
 ```javascript
 // abaixo de 
 // import ReactDOM from 'react-dom/client';
-import './styles/tailwind.css';
+import './tailwind.css';
 ```
 
 Reinicie o servidor. Tudo ok para o desenvolvimento de nossas rotas de acesso com componentes.
@@ -434,7 +434,7 @@ const TaskContext = createContext();
 
 export const TaskProvider = ({children}) => {
   const { data, isLoading, error, refetch } = useQuery("tasks", () => { // em data obtemos os dados, isLoading retorna true ou false enquanto a consulta esta ainda sendo realizada, error é quando acontece algum erro e refectch sinaliza realizar a consulta desta query novamente caso chamada
-      return axios.get('/tasks').then((response) => response.data);
+      return axios.get('/api/tasks').then((response) => response.data);
     },
     {
       retry: 5, // tentativa 5 vezes caso erros ocorram
@@ -446,7 +446,7 @@ export const TaskProvider = ({children}) => {
   // este taskMutation terá o papel de executar algo em nossa API Rails, portanto enviando uma atualização
   const taskMutation = useMutation({
     mutationFn: ({taskId}) => {
-      return axios.patch(`/tasks/${taskId}`).then((response) => response.data);
+      return axios.patch(`/api/tasks/${taskId}`).then((response) => response.data);
     },
     // Um ponto importante é quando a operacao acima for finalizada com sucesso, algo pode ser executado, no caso estamos refazendo a busca a API
     onSuccess: (data) => {
@@ -603,7 +603,7 @@ const ProjectContext = createContext();
 
 export const ProjectProvider = ({children}) => {
   const { data, isLoading, error, refetch } = useQuery("projects", () => {
-      return axios.get('/projects').then((response) => response.data);
+      return axios.get('/api/projects').then((response) => response.data);
     },
     {
       retry: 5,
@@ -614,7 +614,7 @@ export const ProjectProvider = ({children}) => {
 
   const projectMutation = useMutation({
     mutationFn: ({projectId}) => {
-      return axios.patch(`/projects/${projectId}`).then((response) => response.data);
+      return axios.patch(`/api/projects/${projectId}`).then((response) => response.data);
     },
     onSuccess: (data) => {
       refetch()
@@ -724,4 +724,3 @@ Observem o tanto de informações que são processadas e compartilhadas para tod
 - Familiaridade com o terminal de linha de comando.
 
 Ao concluir este curso, você estará apto a desenvolver aplicações web modernas utilizando React, com habilidades para criar e gerenciar tarefas e projetos de forma eficiente.
-
