@@ -1,6 +1,9 @@
 // src/components/Tasks.js
 import React from 'react';
+import axios from 'axios';
 import { useTaskContext } from '../context/TaskContext';
+
+const baseURL = axios.defaults.baseURL;
 
 const Tasks = () => {
   const { tasks, completeTask, isLoadingTasks } = useTaskContext();
@@ -19,7 +22,14 @@ const Tasks = () => {
         <tbody>
           {!isLoadingTasks && tasks.map((task) => (
             <tr key={task.id}>
-              <td className="border border-gray-200 px-4 py-2">{task.title}</td>
+              <td className="border border-gray-200 px-4 py-2">
+                {task.title}
+                <>
+                  {task.feature_image_url && (
+                    <img src={baseURL + task.feature_image_url} alt="Feature Image" />
+                  )}
+                </>
+              </td>
               <td className="border border-gray-200 px-4 py-2">
                 {task.completed_at ? (
                   <span className="text-green-500">Completed</span>
