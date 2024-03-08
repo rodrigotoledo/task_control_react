@@ -102,7 +102,6 @@ Então abra o arquivo `index.js` que esta na pasta `src` e coloque o seguinte co
 
 ```javascript
 // abaixo de
-// import reportWebVitals from './reportWebVitals';
 import axios from 'axios';
 axios.defaults.baseURL = process.env.REACT_APP_API_HTTP_ADDRESS;
 ```
@@ -402,7 +401,6 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './styles/tailwind.css';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
 import { QueryClient, QueryClientProvider} from 'react-query';
 import axios from 'axios';
 axios.defaults.baseURL = process.env.REACT_APP_API_HTTP_ADDRESS;
@@ -418,7 +416,6 @@ root.render(
     </QueryClientProvider>
   </React.StrictMode>
 );
-reportWebVitals();
 ```
 
 Veja que queremos ser um Cliente provedor de informações onde passamos via `client` uma instância para ser utilizada como estratégia das operações.

@@ -25,7 +25,7 @@ const Projects = () => {
                 {project.title}
                 <>
                   {project.feature_image_url && (
-                    <img src={baseURL + project.feature_image_url} alt="Feature Image" />
+                    <img src={baseURL + project.feature_image_url} alt="Feature Image" className='w-20' />
                   )}
                 </>
               </td>
