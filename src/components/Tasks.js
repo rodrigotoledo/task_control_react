@@ -2,7 +2,6 @@
 import React from 'react';
 import axios from 'axios';
 import { useTaskContext } from '../context/TaskContext';
-
 const baseURL = axios.defaults.baseURL;
 
 const Tasks = () => {
@@ -26,7 +25,7 @@ const Tasks = () => {
                 {task.title}
                 <>
                   {task.feature_image_url && (
-                    <img src={baseURL + task.feature_image_url} alt="Feature Image" />
+                    <img src={baseURL + task.feature_image_url} alt="Feature Image" className='w-20' />
                   )}
                 </>
               </td>
