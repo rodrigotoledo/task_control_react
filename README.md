@@ -4,7 +4,7 @@
 
 - **React**
 - **TailwindCSS**
-- **ReactQuery**
+- **ReactQuery (tanstack)**
 
 ## Diferenciais
 
