@@ -1,28 +1,45 @@
 import React, { createContext, useContext } from 'react';
-import { useQuery, useMutation } from 'react-query';
+import {
+  useQuery,
+  useMutation,
+  useQueryClient
+} from '@tanstack/react-query'
 import axios from 'axios';
 
 const TaskContext = createContext();
 
+const getTasks = () => {
+  return axios.get('/api/tasks').then((response) => response.data);
+}
+
 export const TaskProvider = ({children}) => {
-  const { data, isLoading, error, refetch } = useQuery("tasks", () => {
-      return axios.get('/api/tasks').then((response) => response.data);
-    },
-    {
-      retry: 5,
-      refetchOnWindowFocus: true,
-      refetchInterval: 5000
-    }
-  );
+  const queryClient = useQueryClient()
+  const { data, isLoading } = useQuery({ queryKey: ['tasks'], queryFn: getTasks })
+
 
   const taskMutation = useMutation({
     mutationFn: ({taskId}) => {
-      return axios.patch(`/api/tasks/${taskId}`).then((response) => response.data);
+      return axios.patch(`/api/tasks/${taskId}/mark_as_completed`).then((response) => response.data);
     },
     onSuccess: (data) => {
-      refetch()
+      queryClient.invalidateQueries({ queryKey: ['tasks'] })
     }
   })
+
+  const destroyMutation = useMutation({
+    mutationFn: ({taskId}) => {
+      if (window.confirm('Are you sure?')) {
+        return axios.delete(`/api/tasks/${taskId}`)
+      }
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['tasks'] })
+    }
+  })
+
+  const destroyTask = (task) => {
+    destroyMutation.mutate({taskId: task.id})
+  }
 
   const completeTask = (task) => {
     taskMutation.mutate({taskId: task.id})
@@ -49,7 +66,7 @@ export const TaskProvider = ({children}) => {
     }
   };
 
-  return <TaskContext.Provider value={{tasks: data, completeTask: completeTask, isLoadingTasks: isLoading, completedTaskCount: completedTaskCount, tasksColor: getCompletionColor }}>{children}</TaskContext.Provider>
+  return <TaskContext.Provider value={{tasks: data, destroyTask: destroyTask, completeTask: completeTask, isLoadingTasks: isLoading, completedTaskCount: completedTaskCount, tasksColor: getCompletionColor }}>{children}</TaskContext.Provider>
 }
 
 export const useTaskContext = () => {

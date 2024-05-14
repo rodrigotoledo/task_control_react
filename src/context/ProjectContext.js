@@ -1,28 +1,45 @@
 import React, { createContext, useContext } from 'react';
-import { useQuery, useMutation } from 'react-query';
+import {
+  useQuery,
+  useMutation,
+  useQueryClient
+} from '@tanstack/react-query'
 import axios from 'axios';
 
 const ProjectContext = createContext();
 
+const getProjects = () => {
+  return axios.get('/api/projects').then((response) => response.data);
+}
+
 export const ProjectProvider = ({children}) => {
-  const { data, isLoading, error, refetch } = useQuery("projects", () => {
-      return axios.get('/api/projects').then((response) => response.data);
-    },
-    {
-      retry: 5,
-      refetchOnWindowFocus: true,
-      refetchInterval: 5000
-    }
-  );
+  const queryClient = useQueryClient()
+  const { data, isLoading } = useQuery({ queryKey: ['projects'], queryFn: getProjects })
+
 
   const projectMutation = useMutation({
     mutationFn: ({projectId}) => {
-      return axios.patch(`/api/projects/${projectId}`).then((response) => response.data);
+      return axios.patch(`/api/projects/${projectId}/mark_as_completed`).then((response) => response.data);
     },
     onSuccess: (data) => {
-      refetch()
+      queryClient.invalidateQueries({ queryKey: ['projects'] })
     }
   })
+
+  const destroyMutation = useMutation({
+    mutationFn: ({projectId}) => {
+      if (window.confirm('Are you sure?')) {
+        return axios.delete(`/api/projects/${projectId}`)
+      }
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['projects'] })
+    }
+  })
+
+  const destroyProject = (project) => {
+    destroyMutation.mutate({projectId: project.id})
+  }
 
   const completeProject = (project) => {
     projectMutation.mutate({projectId: project.id})
@@ -49,8 +66,7 @@ export const ProjectProvider = ({children}) => {
     }
   };
 
-
-  return <ProjectContext.Provider value={{projects: data, completeProject: completeProject, isLoadingProjects: isLoading, completedProjectCount: completedProjectCount, projectsColor: getCompletionColor }}>{children}</ProjectContext.Provider>
+  return <ProjectContext.Provider value={{projects: data, destroyProject: destroyProject, completeProject: completeProject, isLoadingProjects: isLoading, completedProjectCount: completedProjectCount, projectsColor: getCompletionColor }}>{children}</ProjectContext.Provider>
 }
 
 export const useProjectContext = () => {

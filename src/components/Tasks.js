@@ -1,16 +1,24 @@
 // src/components/Tasks.js
 import React from 'react';
-import axios from 'axios';
+import { Link } from 'react-router-dom';
 import { useTaskContext } from '../context/TaskContext';
-const baseURL = axios.defaults.baseURL;
+const baseURL = process.env.REACT_APP_API_HTTP_ADDRESS
 
 const Tasks = () => {
-  const { tasks, completeTask, isLoadingTasks } = useTaskContext();
+  const { tasks, completeTask, destroyTask, isLoadingTasks } = useTaskContext();
   
   return (
-    <div className="w-full px-10 mt-8">
-      <h2 className="text-2xl font-bold mb-4">Task List</h2>
-      <table className="min-w-full border border-gray-200">
+    <div className="mx-auto w-full">
+      <div className="flex justify-between items-center">
+        <h1 className="font-bold text-4xl">Tasks</h1>
+        <Link
+          to="/tasks/new"
+          className="rounded-lg py-3 px-5 bg-blue-600 text-white block font-medium"
+        >
+          New task
+        </Link>
+      </div>
+      <table className="min-w-full border border-gray-200 mt-4">
         <thead>
           <tr>
             <th className="border border-gray-200 px-4 py-2 text-left">Task</th>
@@ -22,12 +30,16 @@ const Tasks = () => {
           {!isLoadingTasks && tasks.map((task) => (
             <tr key={task.id}>
               <td className="border border-gray-200 px-4 py-2">
-                {task.title}
-                <>
-                  {task.feature_image_url && (
-                    <img src={baseURL + task.feature_image_url} alt="Feature Image" className='w-20' />
-                  )}
-                </>
+                <div className='items-center space-x-2 flex-row flex'>
+                  <div>
+                    {task.feature_image_url && (
+                      <img src={baseURL + task.feature_image_url} alt="Feature Image" className='w-20' />
+                      )}
+                  </div>
+                  <div>
+                    {task.title}
+                  </div>
+                </div>
               </td>
               <td className="border border-gray-200 px-4 py-2">
                 {task.completed_at ? (
@@ -36,17 +48,27 @@ const Tasks = () => {
                   <span className="text-yellow-500">Pending</span>
                 )}
               </td>
-              <td className="border border-gray-200 px-4 py-2">
-                {task.completed_at ? (
-                  <span className="text-green-500">{new Date(task.completed_at).toLocaleString()}</span>
-                ) : (
-                 <button
-                    className="bg-blue-500 text-white px-2 py-1 rounded"
+              <td className="border border-gray-200 px-4 py-2 space-x-2">
+                {!task.completed_at && (
+                  <Link
+                    className="bg-blue-500 text-white p-2 rounded"
                     onClick={() => completeTask(task)}
                   >
                     Mark as Completed
-                  </button>
+                  </Link>
                 )}
+                <Link
+                  to={`/tasks/${task.id}/edit`}
+                  className="bg-blue-500 text-white p-2 rounded"
+                >
+                  Edit
+                </Link>
+                <Link
+                  className="bg-red-500 text-white p-2 rounded"
+                  onClick={() => destroyTask(task)}
+                >
+                  Destroy
+                </Link>
               </td>
             </tr>
           ))}

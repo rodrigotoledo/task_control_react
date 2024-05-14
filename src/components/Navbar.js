@@ -1,7 +1,7 @@
 // Navbar.js
 import React from 'react';
 import { FaBriefcase, FaTasks, FaCheckDouble } from 'react-icons/fa';
-import { Link } from 'react-router-dom'; // Se estiver usando react-router
+import { Link } from 'react-router-dom';
 import { useTaskContext } from '../context/TaskContext';
 import { useProjectContext } from '../context/ProjectContext';
 
