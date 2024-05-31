@@ -1,19 +1,31 @@
 // Navbar.js
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FaBriefcase, FaTasks, FaCheckDouble } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { useTaskContext } from '../context/TaskContext';
 import { useProjectContext } from '../context/ProjectContext';
+import { useRefreshOnFocus } from '../hooks/useRefreshOnFocus';
 
 
 const Navbar = () => {
-  const { completedTaskCount, tasksColor } = useTaskContext();
+  const { completedTaskCount, tasksColor, refetchTasks } = useTaskContext();
   const countCompletedTask = completedTaskCount();
   const tasksColorTheme = tasksColor()
 
-  const { completedProjectCount, projectsColor } = useProjectContext();
+  const { completedProjectCount, projectsColor, refetchProjects } = useProjectContext();
   const countCompletedProject = completedProjectCount();
   const projectsColorTheme = projectsColor()
+
+  useRefreshOnFocus(refetchTasks);
+  useRefreshOnFocus(refetchProjects);
+
+  useEffect(() => {
+    refetchTasks();
+  }, [refetchTasks]);
+
+  useEffect(() => {
+    refetchProjects();
+  }, [refetchProjects]);
 
   return (
     <nav className="bg-gray-800 p-4 text-white fixed w-full top-0">

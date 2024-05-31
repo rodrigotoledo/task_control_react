@@ -1,9 +1,5 @@
-import React, { createContext, useContext } from 'react';
-import {
-  useQuery,
-  useMutation,
-  useQueryClient
-} from '@tanstack/react-query'
+import React, { createContext, useContext, useMemo } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 
 const ProjectContext = createContext();
@@ -14,7 +10,7 @@ const getProjects = () => {
 
 export const ProjectProvider = ({children}) => {
   const queryClient = useQueryClient()
-  const { data, isLoading } = useQuery({ queryKey: ['projects'], queryFn: getProjects })
+  const { data, isLoading, refetch } = useQuery({ queryKey: ['projects'], queryFn: getProjects })
 
 
   const projectMutation = useMutation({
@@ -66,7 +62,20 @@ export const ProjectProvider = ({children}) => {
     }
   };
 
-  return <ProjectContext.Provider value={{projects: data, destroyProject: destroyProject, completeProject: completeProject, isLoadingProjects: isLoading, completedProjectCount: completedProjectCount, projectsColor: getCompletionColor }}>{children}</ProjectContext.Provider>
+  const value = useMemo(
+    () => ({
+      projects: data,
+      isLoadingProjects: isLoading,
+      refetchProjects: refetch,
+      completeProject,
+      destroyProject,
+      completedProjectCount,
+      projectsColor: getCompletionColor,
+    }),
+    [data, isLoading, refetch, projectMutation, destroyMutation]
+  );
+
+  return <ProjectContext.Provider value={value}>{children}</ProjectContext.Provider>;
 }
 
 export const useProjectContext = () => {

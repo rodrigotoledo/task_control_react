@@ -1,12 +1,19 @@
 // src/components/Projects.js
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useProjectContext } from '../context/ProjectContext';
+import { useRefreshOnFocus } from '../hooks/useRefreshOnFocus';
 const baseURL = process.env.REACT_APP_API_HTTP_ADDRESS
 
 const Projects = () => {
-  const { projects, completeProject, destroyProject, isLoadingProjects } = useProjectContext();
+  const { projects, completeProject, destroyProject, isLoadingProjects, refetchProjects } = useProjectContext();
   
+  useRefreshOnFocus(refetchProjects);
+
+  useEffect(() => {
+    refetchProjects();
+  }, [refetchProjects]);
+
   return (
     <div className="mx-auto w-full">
       <div className="flex justify-between items-center">
@@ -27,7 +34,7 @@ const Projects = () => {
           </tr>
         </thead>
         <tbody>
-          {!isLoadingProjects && projects.map((project) => (
+          {!isLoadingProjects && projects?.map((project) => (
             <tr key={project.id}>
               <td className="border border-gray-200 px-4 py-2">
                 <div className='items-center space-x-2 flex-row flex'>

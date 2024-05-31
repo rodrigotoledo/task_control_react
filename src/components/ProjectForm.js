@@ -4,9 +4,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useForm } from "react-hook-form"
 import axios from 'axios';
-axios.defaults.baseURL = process.env.REACT_APP_API_HTTP_ADDRESS;
 const baseURL = process.env.REACT_APP_API_HTTP_ADDRESS
-
 
 const ProjectForm = () => {
 

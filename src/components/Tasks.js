@@ -1,11 +1,18 @@
 // src/components/Tasks.js
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useTaskContext } from '../context/TaskContext';
+import { useRefreshOnFocus } from '../hooks/useRefreshOnFocus';
 const baseURL = process.env.REACT_APP_API_HTTP_ADDRESS
 
 const Tasks = () => {
-  const { tasks, completeTask, destroyTask, isLoadingTasks } = useTaskContext();
+  const { tasks, completeTask, destroyTask, isLoadingTasks, refetchTasks } = useTaskContext();
+
+  useRefreshOnFocus(refetchTasks);
+
+  useEffect(() => {
+    refetchTasks();
+  }, [refetchTasks]);
   
   return (
     <div className="mx-auto w-full">
@@ -27,7 +34,7 @@ const Tasks = () => {
           </tr>
         </thead>
         <tbody>
-          {!isLoadingTasks && tasks.map((task) => (
+          {!isLoadingTasks && tasks?.map((task) => (
             <tr key={task.id}>
               <td className="border border-gray-200 px-4 py-2">
                 <div className='items-center space-x-2 flex-row flex'>
@@ -50,12 +57,12 @@ const Tasks = () => {
               </td>
               <td className="border border-gray-200 px-4 py-2 space-x-2">
                 {!task.completed_at && (
-                  <Link
+                  <button
                     className="bg-blue-500 text-white p-2 rounded"
                     onClick={() => completeTask(task)}
                   >
                     Mark as Completed
-                  </Link>
+                  </button>
                 )}
                 <Link
                   to={`/tasks/${task.id}/edit`}
@@ -63,12 +70,12 @@ const Tasks = () => {
                 >
                   Edit
                 </Link>
-                <Link
+                <button
                   className="bg-red-500 text-white p-2 rounded"
                   onClick={() => destroyTask(task)}
                 >
                   Destroy
-                </Link>
+                </button>
               </td>
             </tr>
           ))}
