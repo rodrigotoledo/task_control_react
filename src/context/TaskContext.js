@@ -1,49 +1,44 @@
-import React, { createContext, useContext } from 'react';
-import {
-  useQuery,
-  useMutation,
-  useQueryClient
-} from '@tanstack/react-query'
+import React, { createContext, useContext, useMemo } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 
 const TaskContext = createContext();
 
 const getTasks = () => {
   return axios.get('/api/tasks').then((response) => response.data);
-}
+};
 
-export const TaskProvider = ({children}) => {
-  const queryClient = useQueryClient()
-  const { data, isLoading } = useQuery({ queryKey: ['tasks'], queryFn: getTasks })
-
+export const TaskProvider = ({ children }) => {
+  const queryClient = useQueryClient();
+  const { data, isLoading, refetch } = useQuery({ queryKey: ['tasks'], queryFn: getTasks });
 
   const taskMutation = useMutation({
-    mutationFn: ({taskId}) => {
+    mutationFn: ({ taskId }) => {
       return axios.patch(`/api/tasks/${taskId}/mark_as_completed`).then((response) => response.data);
     },
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ['tasks'] })
-    }
-  })
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['tasks'] });
+    },
+  });
 
   const destroyMutation = useMutation({
-    mutationFn: ({taskId}) => {
+    mutationFn: ({ taskId }) => {
       if (window.confirm('Are you sure?')) {
-        return axios.delete(`/api/tasks/${taskId}`)
+        return axios.delete(`/api/tasks/${taskId}`);
       }
     },
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ['tasks'] })
-    }
-  })
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['tasks'] });
+    },
+  });
 
   const destroyTask = (task) => {
-    destroyMutation.mutate({taskId: task.id})
-  }
+    destroyMutation.mutate({ taskId: task.id });
+  };
 
   const completeTask = (task) => {
-    taskMutation.mutate({taskId: task.id})
-  }
+    taskMutation.mutate({ taskId: task.id });
+  };
 
   const completedTaskCount = () => {
     return !isLoading && data.filter((task) => task.completed_at).length;
@@ -51,7 +46,7 @@ export const TaskProvider = ({children}) => {
 
   const getCompletionColor = () => {
     if (isLoading) {
-      return 'gray'; 
+      return 'gray';
     }
 
     const count = completedTaskCount();
@@ -66,9 +61,20 @@ export const TaskProvider = ({children}) => {
     }
   };
 
-  return <TaskContext.Provider value={{tasks: data, destroyTask: destroyTask, completeTask: completeTask, isLoadingTasks: isLoading, completedTaskCount: completedTaskCount, tasksColor: getCompletionColor }}>{children}</TaskContext.Provider>
-}
+  const value = useMemo(
+    () => ({
+      tasks: data,
+      isLoadingTasks: isLoading,
+      refetchTasks: refetch,
+      completeTask,
+      destroyTask,
+      completedTaskCount,
+      tasksColor: getCompletionColor,
+    }),
+    [data, isLoading, refetch, taskMutation, destroyMutation]
+  );
 
-export const useTaskContext = () => {
-  return useContext(TaskContext);
+  return <TaskContext.Provider value={value}>{children}</TaskContext.Provider>;
 };
+
+export const useTaskContext = () => useContext(TaskContext);
