@@ -2,7 +2,7 @@
 import React from 'react';
 import { useProjectContext } from '../context/ProjectContext';
 import axios from 'axios';
-const baseURL = axios.defaults.baseURL;
+const baseURL = process.env.REACT_APP_API_HTTP_ADDRESSL;
 
 const Projects = () => {
   const { projects, completeProject, isLoadingProjects } = useProjectContext();

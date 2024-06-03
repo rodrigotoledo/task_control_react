@@ -2,7 +2,7 @@
 import React from 'react';
 import axios from 'axios';
 import { useTaskContext } from '../context/TaskContext';
-const baseURL = axios.defaults.baseURL;
+const baseURL = process.env.REACT_APP_API_HTTP_ADDRESS;
 
 const Tasks = () => {
   const { tasks, completeTask, isLoadingTasks } = useTaskContext();
