@@ -1,8 +1,7 @@
 // src/components/Projects.js
 import React from 'react';
 import { useProjectContext } from '../context/ProjectContext';
-import axios from 'axios';
-const baseURL = process.env.REACT_APP_API_HTTP_ADDRESSL;
+const baseURL = process.env.REACT_APP_API_HTTP_ADDRESS;
 
 const Projects = () => {
   const { projects, completeProject, isLoadingProjects } = useProjectContext();

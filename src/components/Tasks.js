@@ -1,6 +1,5 @@
 // src/components/Tasks.js
 import React from 'react';
-import axios from 'axios';
 import { useTaskContext } from '../context/TaskContext';
 const baseURL = process.env.REACT_APP_API_HTTP_ADDRESS;
 
