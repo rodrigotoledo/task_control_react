@@ -55,27 +55,30 @@ const Projects = () => {
                   <span className="text-yellow-500">Pending</span>
                 )}
               </td>
-              <td className="border border-gray-200 px-4 py-2 space-x-2">
-                {!project.completed_at && (
-                  <Link
-                    className="bg-blue-500 text-white p-2 rounded"
+              <td className="border border-gray-200 px-4 py-2">
+                <div className="flex space-x-2">
+
+                  {!project.completed_at && (
+                    <Link
+                    className="bg-blue-500 text-white p-2 rounded text-nowrap"
                     onClick={() => completeProject(project)}
+                    >
+                      Mark as Completed
+                    </Link>
+                  )}
+                  <Link
+                    to={`/projects/${project.id}/edit`}
+                    className="bg-blue-500 text-white p-2 rounded"
                   >
-                    Mark as Completed
+                    Edit
                   </Link>
-                )}
-                <Link
-                  to={`/projects/${project.id}/edit`}
-                  className="bg-blue-500 text-white p-2 rounded"
-                >
-                  Edit
-                </Link>
-                <Link
-                  className="bg-red-500 text-white p-2 rounded"
-                  onClick={() => destroyProject(project)}
-                >
-                  Destroy
-                </Link>
+                  <Link
+                    className="bg-red-500 text-white p-2 rounded"
+                    onClick={() => destroyProject(project)}
+                  >
+                    Destroy
+                  </Link>
+                </div>
               </td>
             </tr>
           ))}
