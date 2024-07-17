@@ -55,27 +55,29 @@ const Tasks = () => {
                   <span className="text-yellow-500">Pending</span>
                 )}
               </td>
-              <td className="border border-gray-200 px-4 py-2 space-x-2">
-                {!task.completed_at && (
-                  <button
+              <td className="border border-gray-200 px-4 py-2">
+                <div className="flex space-x-2">
+                  {!task.completed_at && (
+                    <button
+                      className="bg-blue-500 text-white p-2 rounded text-nowrap"
+                      onClick={() => completeTask(task)}
+                    >
+                      Mark as Completed
+                    </button>
+                  )}
+                  <Link
+                    to={`/tasks/${task.id}/edit`}
                     className="bg-blue-500 text-white p-2 rounded"
-                    onClick={() => completeTask(task)}
                   >
-                    Mark as Completed
+                    Edit
+                  </Link>
+                  <button
+                    className="bg-red-500 text-white p-2 rounded"
+                    onClick={() => destroyTask(task)}
+                  >
+                    Destroy
                   </button>
-                )}
-                <Link
-                  to={`/tasks/${task.id}/edit`}
-                  className="bg-blue-500 text-white p-2 rounded"
-                >
-                  Edit
-                </Link>
-                <button
-                  className="bg-red-500 text-white p-2 rounded"
-                  onClick={() => destroyTask(task)}
-                >
-                  Destroy
-                </button>
+                </div>
               </td>
             </tr>
           ))}

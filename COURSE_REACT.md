@@ -6,7 +6,7 @@ Neste curso, vamos aprender a desenvolver uma aplicação web utilizando React, 
 
 - React
 - TailwindCSS
-- ReactQuery
+- @tanstack/react-query
 - Axios
 
 ## Módulos do Curso:
@@ -40,7 +40,7 @@ npm install axios
 npm install -D tailwindcss
 npm install react-icons --save
 npm install react-router-dom
-npm install react-query
+npm install @tanstack/react-query
 ```
 
 ### 2. Configurando o Layout com TailwindCSS
@@ -233,7 +233,7 @@ export default App;
 
 Ou seja, temos nossa aplicação com rotas direcionando aos componentes, e nossa barra de navegação podendo ir para tais componentes.
 
-Desenvolva as funcionalidades de listar, criar, atualizar e excluir tarefas na aplicação, utilizando React e ReactQuery para gerenciar o estado da aplicação de forma assíncrona.
+Desenvolva as funcionalidades de listar, criar, atualizar e excluir tarefas na aplicação, utilizando React e @tanstack/react-query para gerenciar o estado da aplicação de forma assíncrona.
 
 ### 5. Gerenciamento de Estado com Context API
 
@@ -388,20 +388,20 @@ Percebam que buscamos as duas informações dos contextos que existem, ou seja, 
 
 Mas agora é que realmente vai ficar bom pois iremos consultar na `API` em `Rails`
 
-### 6. Usando React-Query para realizar operações na API
+### 6. Usando @tanstack/react-query para realizar operações na API
 
 Nunca foi tão fácil receber informações e também fazer operações com React usando essa biblioteca.
 
 Com as operações sendo feitas, podemos refazer consultas de tempo em tempo ou ate mesmo em caso de falha. Tambem é possivel disparar um evento caso a execução de uma função.
 
-Usaremos o `axios` e `react-query` pra tudo isto. Agora o arquivo `src/index.js` ficará assim
+Usaremos o `axios` e `@tanstack/react-query` pra tudo isto. Agora o arquivo `src/index.js` ficará assim
 
 ```javascript
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './styles/tailwind.css';
 import App from './App';
-import { QueryClient, QueryClientProvider} from 'react-query';
+import { QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import axios from 'axios';
 axios.defaults.baseURL = process.env.REACT_APP_API_HTTP_ADDRESS;
 
@@ -424,7 +424,7 @@ Então vamos partir para os dados reais aparecendo na tela, mas por onde isso oc
 
 ```javascript
 import React, { createContext, useContext } from 'react';
-import { useQuery, useMutation } from 'react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 
 const TaskContext = createContext();
@@ -593,7 +593,7 @@ Mas ainda temos problemas pois em `Navbar.js` precisamos das informações do co
 
 ```javascript
 import React, { createContext, useContext } from 'react';
-import { useQuery, useMutation } from 'react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 
 const ProjectContext = createContext();
