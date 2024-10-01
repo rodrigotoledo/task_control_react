@@ -1,8 +1,9 @@
 // src/components/Tasks.js
 import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { useTaskContext } from '../context/TaskContext';
 import { useRefreshOnFocus } from '../hooks/useRefreshOnFocus';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
 const baseURL = process.env.REACT_APP_API_HTTP_ADDRESS
 
 const Tasks = () => {
@@ -15,22 +16,22 @@ const Tasks = () => {
   }, [refetchTasks]);
   
   return (
-    <div className="mx-auto w-full">
+    <div className="w-full mt-32 px-10">
       <div className="flex justify-between items-center">
         <h1 className="font-bold text-4xl">Tasks</h1>
-        <Link
-          to="/tasks/new"
-          className="rounded-lg py-3 px-5 bg-blue-600 text-white block font-medium"
+        <Button
+          variant="contained"
+          href="/tasks/new"
         >
           New task
-        </Link>
+        </Button>
       </div>
       <div className='grid grid-cols-2 md:grid-cols-2 gap-4 my-10'>
         {!isLoadingTasks && tasks?.map((task) => (
-          <div key={task.id} className='p-4 rounded-md border-1 border space-y-4 shadow-lg'>
+          <div key={task.id} className='p-4 rounded-md border-1 border space-y-4 shadow-lg transition-all duration-300 hover:shadow-2xl'>
             <div className='items-center space-x-2 flex-row flex'>
               {task.feature_image_url && (
-                <img src={baseURL + task.feature_image_url} alt="Feature Image" className='w-20' />
+                <img src={baseURL + task.feature_image_url} alt="Feature Image" className='w-20 h-20 rounded-full' />
               )}
               <div>
                 <h1 className='text-xl mb-2'>{task.title}</h1>
@@ -42,28 +43,13 @@ const Tasks = () => {
               </div>
             </div>
             
-            <div className="flex space-x-2">
+            <ButtonGroup variant="contained" aria-label="Basic button group">
               {!task.completed_at && (
-                <Link
-                className="bg-blue-500 text-white p-1 rounded text-nowrap"
-                onClick={() => completeTask(task)}
-                >
-                  Mark as Completed
-                </Link>
-              )}
-              <Link
-                to={`/tasks/${task.id}/edit`}
-                className="bg-blue-500 text-white p-1 rounded"
-              >
-                Edit
-              </Link>
-              <Link
-                className="bg-red-500 text-white p-1 rounded"
-                onClick={() => destroyTask(task)}
-              >
-                Destroy
-              </Link>
-            </div>
+              <Button variant="contained" onClick={() => completeTask(task)}>Mark as Completed</Button>
+            )}
+              <Button variant="contained" href={`/tasks/${task.id}/edit`}>Edit</Button>
+              <Button sx={{ backgroundColor: '#FF5733', color: '#FFFFFF' }} variant="contained" onClick={() => destroyTask(task)}>Destroy</Button>
+            </ButtonGroup>
           </div>
         ))}
       </div>

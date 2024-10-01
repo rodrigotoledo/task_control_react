@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import humanizeString from 'humanize-string';
 import { useQueryClient } from '@tanstack/react-query'
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
 import { useForm } from "react-hook-form"
 import axios from 'axios';
 const baseURL = process.env.REACT_APP_API_HTTP_ADDRESS
@@ -19,8 +21,8 @@ const TaskForm = () => {
   const fetchTaskDetails = async () => {
     try {
       const response = await axios.get(`/api/tasks/${id}`);
-      const scheduledAtFormatted = new Date(response.data.scheduled_at).toISOString().slice(0, 16);
-      const completedAtFormatted = new Date(response.data.completed_at).toISOString().slice(0, 16);
+      const completedAtFormatted = response.data.completed_at && new Date(response.data.completed_at).toISOString().slice(0, 16);
+      const scheduledAtFormatted = response.data.scheduled_at && new Date(response.data.scheduled_at).toISOString().slice(0, 16);
       
       setFeatureImage(response.data.feature_image_url);
 
@@ -91,7 +93,7 @@ const TaskForm = () => {
   };
 
   return (
-    <div className="mx-auto w-full">
+    <div className="w-full mt-32 px-10">
       <h1 className="font-bold text-4xl">{!id ? 'New task' : 'Editing task'}</h1>
 
       {errors && Object.keys(errors).length > 0 && (
@@ -128,20 +130,20 @@ const TaskForm = () => {
         <div className="my-5">
           <label>
             Scheduled At:
-            <input type="datetime-local" {...register('scheduledAt')} className="block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" />
+            <input type="datetime-local" defaultValue="" {...register('scheduledAt')} className="block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" />
           </label>
         </div>
 
         <div className="my-5">
           <label>
             Completed At:
-            <input type="datetime-local" {...register('completedAt')} className="block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" />
+            <input type="datetime-local" defaultValue="" {...register('completedAt')} className="block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" />
           </label>
         </div>
-        <button type="submit" className="rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer">{!id ? 'Create task' : 'Update task'}</button>
-        <Link to="/tasks" className="ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium">
-          Back to tasks
-        </Link>
+        <ButtonGroup variant="contained" aria-label="Basic button group">
+          <Button variant="contained" type='submit'>{!id ? 'Create task' : 'Update task'}</Button>
+          <Button href='/tasks' variant="contained" sx={{ backgroundColor: '#F3F4F6', color: '#000000' }}>Back</Button>
+        </ButtonGroup>
       </form>
     </div>
   );

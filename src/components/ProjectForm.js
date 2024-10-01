@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import humanizeString from 'humanize-string';
 import { useQueryClient } from '@tanstack/react-query'
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
 import { useForm } from "react-hook-form"
 import axios from 'axios';
 const baseURL = process.env.REACT_APP_API_HTTP_ADDRESS
@@ -19,7 +21,7 @@ const ProjectForm = () => {
   const fetchProjectDetails = async () => {
     try {
       const response = await axios.get(`/api/projects/${id}`);
-      const completedAtFormatted = new Date(response.data.completed_at).toISOString().slice(0, 16);
+      const completedAtFormatted = response.data.completed_at && new Date(response.data.completed_at).toISOString().slice(0, 16);
       
       setFeatureImage(response.data.feature_image_url);
 
@@ -83,7 +85,7 @@ const ProjectForm = () => {
   };
 
   return (
-    <div className="mx-auto w-full">
+    <div className="w-full mt-32 px-10">
       <h1 className="font-bold text-4xl">{!id ? 'New project' : 'Editing project'}</h1>
 
       {errors && Object.keys(errors).length > 0 && (
@@ -123,10 +125,10 @@ const ProjectForm = () => {
             <input type="datetime-local" {...register('completedAt')} className="block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" />
           </label>
         </div>
-        <button type="submit" className="rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer">{!id ? 'Create project' : 'Update project'}</button>
-        <Link to="/projects" className="ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium">
-          Back to projects
-        </Link>
+        <ButtonGroup variant="contained" aria-label="Basic button group">
+          <Button variant="contained" type='submit'>{!id ? 'Create project' : 'Update project'}</Button>
+          <Button href='/projects' variant="contained" sx={{ backgroundColor: '#F3F4F6', color: '#000000' }}>Back</Button>
+        </ButtonGroup>
       </form>
     </div>
   );

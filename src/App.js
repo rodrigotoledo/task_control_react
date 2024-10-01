@@ -15,17 +15,15 @@ const App = () => {
       <ProjectProvider>
         <Router>
           <Navbar />
-          <main className="mx-auto mt-28 px-5">
-            <Routes>
-              <Route path="/" element={<Tasks />} />
-              <Route path="/tasks" element={<Tasks />} />
-              <Route path="/tasks/new" element={<TaskForm />} />
-              <Route path="/tasks/:id/edit" element={<TaskForm />} />
-              <Route path="/projects" element={<Projects />} />
-              <Route path="/projects/new" element={<ProjectForm />} />
-              <Route path="/projects/:id/edit" element={<ProjectForm />} />
-            </Routes>
-          </main>
+          <Routes>
+            <Route path="/" element={<Tasks />} />
+            <Route path="/tasks" element={<Tasks />} />
+            <Route path="/tasks/new" element={<TaskForm />} />
+            <Route path="/tasks/:id/edit" element={<TaskForm />} />
+            <Route path="/projects" element={<Projects />} />
+            <Route path="/projects/new" element={<ProjectForm />} />
+            <Route path="/projects/:id/edit" element={<ProjectForm />} />
+          </Routes>
         </Router>
       </ProjectProvider>
     </TaskProvider>
