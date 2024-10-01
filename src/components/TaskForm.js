@@ -130,14 +130,14 @@ const TaskForm = () => {
         <div className="my-5">
           <label>
             Scheduled At:
-            <input type="datetime-local" defaultValue="" {...register('scheduledAt')} className="block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" />
+            <input type="datetime-local" {...register('scheduledAt')} className="block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" />
           </label>
         </div>
 
         <div className="my-5">
           <label>
             Completed At:
-            <input type="datetime-local" defaultValue="" {...register('completedAt')} className="block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" />
+            <input type="datetime-local" {...register('completedAt')} className="block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" />
           </label>
         </div>
         <ButtonGroup variant="contained" aria-label="Basic button group">
