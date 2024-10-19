@@ -10,7 +10,7 @@ const getProjects = () => {
 
 export const ProjectProvider = ({children}) => {
   const queryClient = useQueryClient()
-  const { data, isLoading, refetch } = useQuery({ queryKey: ['projects'], queryFn: getProjects })
+  const { data, isLoading, refetch } = useQuery({ queryKey: ['projects'], queryFn: getProjects, refetchInterval: 1000 })
 
 
   const projectMutation = useMutation({

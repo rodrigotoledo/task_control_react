@@ -10,7 +10,7 @@ const getTasks = () => {
 
 export const TaskProvider = ({ children }) => {
   const queryClient = useQueryClient();
-  const { data, isLoading, refetch } = useQuery({ queryKey: ['tasks'], queryFn: getTasks });
+  const { data, isLoading, refetch } = useQuery({ queryKey: ['tasks'], queryFn: getTasks, refetchInterval: 1000 });
 
   const taskMutation = useMutation({
     mutationFn: ({ taskId }) => {
